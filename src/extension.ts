@@ -1,26 +1,80 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { posix } from 'path';
+import { getTags, walk } from './utils';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "kainotes" is now active!');
+  console.log('Congratulations, your extension "kainotes" is now active!');
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('kainotes.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from KaiNotes!');
-	});
+  let disposable = vscode.commands.registerCommand(
+    'kainotes.helloWorld',
+    () => {
+      vscode.window.showInformationMessage('Hello World from KaiNotes!');
+    }
+  );
+  context.subscriptions.push(disposable);
 
-	context.subscriptions.push(disposable);
+  vscode.commands.registerCommand('kainotes.tagCloud', async function () {
+    if (!vscode.window.activeTextEditor) {
+      return vscode.window.showInformationMessage('Open a file first');
+    }
+
+    const fileUri = vscode.window.activeTextEditor.document.uri;
+    const folderPath = posix.dirname(fileUri.path);
+    const folderUri = fileUri.with({ path: folderPath });
+
+    const list: string[] = [];
+    await walk(folderUri, list);
+    const tags = await getTags(list);
+    const keys = Object.keys(tags);
+    const tagList = keys.map((key) => [key, tags[key]]);
+
+    const panel = vscode.window.createWebviewPanel(
+      'tagCloud',
+      'Tag Cloud',
+      vscode.ViewColumn.One,
+      {
+        enableScripts: true,
+      }
+    );
+
+    panel.webview.html = getWebviewContent(tagList);
+  });
 }
 
 // this method is called when your extension is deactivated
 export function deactivate() {}
+
+function getWebviewContent(tags: any[] = []) {
+  return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Coding</title>
+    <script src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.min.js"></script>
+</head>
+<body>
+    <canvas id="wordcloud"></canvas>
+    <script>
+      const tags = ${JSON.stringify(tags)};
+
+      const canvas = document.getElementById('wordcloud');
+      canvas.width = window.innerWidth * 0.95;
+      canvas.height = window.innerHeight * 0.95;
+
+      WordCloud(canvas, {
+      list: tags,
+      gridSize: 5,
+      fontFamily: 'Times, serif',
+      weightFactor: 16,
+      color: 'random-dark',
+      rotateRatio: 0,
+      rotationSteps: 2,
+      backgroundColor: '#fff',
+			minSize: 4
+    });
+    </script>
+</body>
+</html>`;
+}
