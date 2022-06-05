@@ -14,14 +14,11 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(disposable);
 
   vscode.commands.registerCommand('kainotes.tagCloud', async function () {
-    if (!vscode.window.activeTextEditor) {
-      return vscode.window.showInformationMessage('Open a file first');
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    if (!workspaceFolders) {
+      return vscode.window.showInformationMessage('Open a folder first');
     }
-
-    const fileUri = vscode.window.activeTextEditor.document.uri;
-    const folderPath = posix.dirname(fileUri.path);
-    const folderUri = fileUri.with({ path: folderPath });
-
+    const folderUri = workspaceFolders[0].uri;
     const list: string[] = [];
     await walk(folderUri, list);
     const tags = await getTags(list);
