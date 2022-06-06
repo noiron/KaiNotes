@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { posix } from 'path';
 import { getTags, walk } from './utils';
+import { NodeDependenciesProvider } from './NodeDependenciesProvider';
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "kainotes" is now active!');
@@ -35,6 +36,20 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
     panel.webview.html = getWebviewContent(tagList);
+  });
+
+  const rootPath =
+    vscode.workspace.workspaceFolders &&
+    vscode.workspace.workspaceFolders.length > 0
+      ? vscode.workspace.workspaceFolders[0].uri.fsPath
+      : undefined;
+  vscode.window.registerTreeDataProvider(
+    'nodeDependencies',
+    new NodeDependenciesProvider(rootPath as string)
+  );
+
+  vscode.window.createTreeView('nodeDependencies', {
+    treeDataProvider: new NodeDependenciesProvider(rootPath as string),
   });
 }
 
