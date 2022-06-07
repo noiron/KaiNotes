@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { posix } from 'path';
 import { getTags, walk } from './utils';
 import { NodeDependenciesProvider } from './NodeDependenciesProvider';
+import { TagProvider } from './TagsProvider';
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "kainotes" is now active!');
@@ -50,6 +51,10 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.window.createTreeView('nodeDependencies', {
     treeDataProvider: new NodeDependenciesProvider(rootPath as string),
+  });
+
+  vscode.window.createTreeView('tags', {
+    treeDataProvider: new TagProvider(rootPath as string),
   });
 }
 

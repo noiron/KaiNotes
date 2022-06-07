@@ -12,7 +12,8 @@
 	"activationEvents": [
 		"onCommand:kainotes.helloWorld",
 		"onCommand:kainotes.tagCloud",
-		"onView:nodeDependencies"
+		"onView:nodeDependencies",
+		"onView:tags"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
@@ -29,6 +30,10 @@
 			"kainotes": [
 				{
 					"id": "nodeDependencies",
+					"name": "Dependencies"
+				},
+				{
+					"id": "tags",
 					"name": "Tags"
 				}
 			]
