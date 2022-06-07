@@ -36,7 +36,11 @@ export class TagProvider implements vscode.TreeDataProvider<TagItem> {
       return tags[tag2] - tags[tag1];
     });
     const tagList = keys.map((key) => {
-      return new TagItem(key, tags[key], vscode.TreeItemCollapsibleState.None);
+      return new TagItem(key, tags[key], vscode.TreeItemCollapsibleState.None, {
+        command: 'kainotes.showTag',
+        title: 'Show',
+        arguments: [key],
+      });
     });
     return Promise.resolve(tagList);
   }
@@ -46,7 +50,8 @@ class TagItem extends vscode.TreeItem {
   constructor(
     public readonly label: string,
     private num: number,
-    public readonly collapsibleState: vscode.TreeItemCollapsibleState
+    public readonly collapsibleState: vscode.TreeItemCollapsibleState,
+    public readonly command?: vscode.Command
   ) {
     super(label, vscode.TreeItemCollapsibleState.Expanded);
     this.tooltip = `${this.label}`;

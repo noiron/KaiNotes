@@ -3,17 +3,14 @@ import { posix } from 'path';
 import { getTags, walk } from './utils';
 import { NodeDependenciesProvider } from './NodeDependenciesProvider';
 import { TagProvider } from './TagsProvider';
+import { FilesProvider } from './FilesProvider';
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "kainotes" is now active!');
 
-  let disposable = vscode.commands.registerCommand(
-    'kainotes.helloWorld',
-    () => {
-      vscode.window.showInformationMessage('Hello World from KaiNotes!');
-    }
-  );
-  context.subscriptions.push(disposable);
+  vscode.commands.registerCommand('kainotes.helloWorld', () => {
+    vscode.window.showInformationMessage('Hello World from KaiNotes!');
+  });
 
   vscode.commands.registerCommand('kainotes.tagCloud', async function () {
     const workspaceFolders = vscode.workspace.workspaceFolders;
@@ -56,6 +53,21 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.window.createTreeView('tags', {
     treeDataProvider: new TagProvider(rootPath as string),
   });
+
+  const filesForTagProvider = new FilesProvider(rootPath as string);
+  vscode.window.createTreeView('filesForTag', {
+    treeDataProvider: filesForTagProvider,
+  });
+  vscode.commands.registerCommand('kainotes.showTag', (tag: string) => {
+    filesForTagProvider.forTag(tag);
+  });
+
+  vscode.commands.registerCommand(
+    'kainotes.openFile',
+    (resource: vscode.Uri) => {
+      vscode.window.showTextDocument(resource);
+    }
+  );
 }
 
 // this method is called when your extension is deactivated

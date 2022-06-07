@@ -35,6 +35,10 @@
 				{
 					"id": "tags",
 					"name": "Tags"
+				},
+				{
+					"id": "filesForTag",
+					"name": "Files for Tag"
 				}
 			]
 		},
