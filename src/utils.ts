@@ -73,6 +73,7 @@ export const isMarkdownFile = (filePath: string) => {
   return extname === '.md' || extname === '.markdown';
 };
 
+// TODO: 如何改为不传 list 的版本
 export async function walk(folder: vscode.Uri, list: string[]): Promise<void> {
   for (const [name, type] of await vscode.workspace.fs.readDirectory(folder)) {
     if (type === vscode.FileType.File) {
@@ -129,3 +130,17 @@ export const checkFileTags = async (filePath: string) => {
   const matchedTags = checkTags(content);
   return matchedTags;
 };
+
+/**
+ * 从文件内容中获得文件标题，一般为文件的第一行，以 # 开头
+ * @param {string} filePath
+ */
+export async function getFileTitle(filePath: string) {
+  const content = await readFileContent(filePath);
+  const lines = content.split('\n');
+  const firstLine = lines[0];
+  if (firstLine.startsWith('# ')) {
+    return firstLine.substring(2).trim();
+  }
+  return '';
+}

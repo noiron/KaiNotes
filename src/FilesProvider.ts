@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { getTag, walk } from './utils';
+import { getFileTitle, getTag, walk } from './utils';
 
 export class FilesProvider implements vscode.TreeDataProvider<FileItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<FileItem | undefined> =
@@ -44,25 +44,28 @@ export class FilesProvider implements vscode.TreeDataProvider<FileItem> {
     const list: string[] = [];
     await walk(folderUri, list);
     const files = await getTag(folderUri.fsPath, list, tag);
-    const fileItems = files.map((file) => {
-      return new FileItem(file, vscode.TreeItemCollapsibleState.None, {
+    const fileItems = files.map(async (file) => {
+      const title = await getFileTitle(path.join(folderUri.fsPath, file));
+      return new FileItem(title, file, vscode.TreeItemCollapsibleState.None, {
         command: 'kainotes.openFile',
         arguments: [vscode.Uri.file(path.join(this.workspaceRoot, file))],
         title: 'show in editor',
       });
     });
-    return Promise.resolve(fileItems);
+    return Promise.all(fileItems);
   }
 }
 
 class FileItem extends vscode.TreeItem {
   constructor(
-    public readonly label: string,
+    public readonly title: string,
+    public readonly file: string,
     public readonly collapsibleState: vscode.TreeItemCollapsibleState,
     public readonly command?: vscode.Command
   ) {
-    super(label, vscode.TreeItemCollapsibleState.Expanded);
-    this.tooltip = `${this.label}`;
+    super(title, vscode.TreeItemCollapsibleState.Expanded);
+    this.tooltip = `${this.file}`;
+    // this.description = file;
   }
 
   iconPath = vscode.ThemeIcon.File;

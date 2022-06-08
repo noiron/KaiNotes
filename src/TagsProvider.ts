@@ -32,9 +32,8 @@ export class TagProvider implements vscode.TreeDataProvider<TagItem> {
     const list: string[] = [];
     await walk(folderUri, list);
     const tags = await getTags(list);
-    const keys = Object.keys(tags).sort((tag1, tag2) => {
-      return tags[tag2] - tags[tag1];
-    });
+    const sortTag = (tag1: string, tag2: string) => tags[tag2] - tags[tag1];
+    const keys = Object.keys(tags).sort(sortTag);
     const tagList = keys.map((key) => {
       return new TagItem(key, tags[key], vscode.TreeItemCollapsibleState.None, {
         command: 'kainotes.showTag',
@@ -48,14 +47,14 @@ export class TagProvider implements vscode.TreeDataProvider<TagItem> {
 
 class TagItem extends vscode.TreeItem {
   constructor(
-    public readonly label: string,
+    public readonly file: string,
     private num: number,
     public readonly collapsibleState: vscode.TreeItemCollapsibleState,
     public readonly command?: vscode.Command
   ) {
-    super(label, vscode.TreeItemCollapsibleState.Expanded);
-    this.tooltip = `${this.label}`;
-    this.description = 'x' + (this.num || 0);
+    super(file, vscode.TreeItemCollapsibleState.Expanded);
+    this.tooltip = `${this.file}`;
+    this.description = 'x ' + (this.num || 0);
   }
 
   iconPath = {
