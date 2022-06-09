@@ -73,20 +73,26 @@ export const isMarkdownFile = (filePath: string) => {
   return extname === '.md' || extname === '.markdown';
 };
 
-// TODO: 如何改为不传 list 的版本
-export async function walk(folder: vscode.Uri, list: string[]): Promise<void> {
+export async function walk(folder: vscode.Uri): Promise<string[]> {
+  const list: string[] = [];
+
   for (const [name, type] of await vscode.workspace.fs.readDirectory(folder)) {
+    if (isExcluded(name)) {
+      continue;
+    }
+
+    const filePath = posix.join(folder.path, name);
     if (type === vscode.FileType.File) {
-      const filePath = posix.join(folder.path, name);
       list.push(filePath);
     } else if (type === vscode.FileType.Directory) {
       if (name.startsWith('.')) {
         continue;
       }
-      const filePath = posix.join(folder.path, name);
-      await walk(folder.with({ path: filePath }), list);
+      const subList = await walk(vscode.Uri.file(filePath));
+      list.push(...subList);
     }
   }
+  return list;
 }
 
 /**
@@ -94,7 +100,7 @@ export async function walk(folder: vscode.Uri, list: string[]): Promise<void> {
  * @param folderPath {string} 文件夹路径
  * @param fileList {string[]} 文件路径列表
  * @param searchTag {string} 要查找的标签
- * @returns 
+ * @returns
  */
 export async function getTag(
   folderPath: string,
@@ -143,4 +149,11 @@ export async function getFileTitle(filePath: string) {
     return firstLine.substring(2).trim();
   }
   return '';
+}
+
+export function isExcluded(filePath: string) {
+  if (/node_modules/.test(filePath)) {
+    return true;
+  }
+  return false;
 }

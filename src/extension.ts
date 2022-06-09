@@ -18,8 +18,7 @@ export function activate(context: vscode.ExtensionContext) {
       return vscode.window.showInformationMessage('Open a folder first');
     }
     const folderUri = workspaceFolders[0].uri;
-    const list: string[] = [];
-    await walk(folderUri, list);
+    const list = await walk(folderUri);
     const tags = await getTags(list);
     const keys = Object.keys(tags);
     const tagList = keys.map((key) => [key, tags[key]]);

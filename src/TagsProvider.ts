@@ -29,8 +29,7 @@ export class TagProvider implements vscode.TreeDataProvider<TagItem> {
       return [];
     }
     const folderUri = workspaceFolders[0].uri;
-    const list: string[] = [];
-    await walk(folderUri, list);
+    const list = await walk(folderUri);
     const tags = await getTags(list);
     const sortTag = (tag1: string, tag2: string) => tags[tag2] - tags[tag1];
     const keys = Object.keys(tags).sort(sortTag);

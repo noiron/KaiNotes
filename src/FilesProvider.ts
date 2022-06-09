@@ -41,11 +41,11 @@ export class FilesProvider implements vscode.TreeDataProvider<FileItem> {
       return [];
     }
     const folderUri = workspaceFolders[0].uri;
-    const list: string[] = [];
-    await walk(folderUri, list);
+    const list = await walk(folderUri);
     const files = await getTag(folderUri.fsPath, list, tag);
     const fileItems = files.map(async (file) => {
       const title = await getFileTitle(path.join(folderUri.fsPath, file));
+
       return new FileItem(title, file, vscode.TreeItemCollapsibleState.None, {
         command: 'kainotes.openFile',
         arguments: [vscode.Uri.file(path.join(this.workspaceRoot, file))],
@@ -65,7 +65,9 @@ class FileItem extends vscode.TreeItem {
   ) {
     super(title, vscode.TreeItemCollapsibleState.Expanded);
     this.tooltip = `${this.file}`;
-    // this.description = file;
+
+    const folder = path.dirname(file);
+    this.description = folder;
   }
 
   iconPath = vscode.ThemeIcon.File;
