@@ -3,6 +3,11 @@
 	"displayName": "KaiNotes",
 	"description": "",
 	"version": "0.0.1",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/noiron/kainotes.git"
+	},
+	"publisher": "noiron",
 	"engines": {
 		"vscode": "^1.67.0"
 	},
@@ -12,7 +17,6 @@
 	"activationEvents": [
 		"onCommand:kainotes.helloWorld",
 		"onCommand:kainotes.tagCloud",
-		"onView:nodeDependencies",
 		"onView:tags"
 	],
 	"main": "./dist/extension.js",
@@ -28,10 +32,6 @@
 		},
 		"views": {
 			"kainotes": [
-				{
-					"id": "nodeDependencies",
-					"name": "Dependencies"
-				},
 				{
 					"id": "tags",
 					"name": "Tags"

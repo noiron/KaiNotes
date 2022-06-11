@@ -102,14 +102,14 @@ export async function walk(folder: vscode.Uri): Promise<string[]> {
  * @param searchTag {string} 要查找的标签
  * @returns
  */
-export async function getTag(
+export async function getFilesContainTag(
   folderPath: string,
   fileList: string[],
   searchTag: string
 ) {
   const list: string[] = [];
   const promises = fileList.filter(isMarkdownFile).map(async (absolutePath) => {
-    const tagsInFile = await checkFileTags(absolutePath);
+    const tagsInFile = await extractFileTags(absolutePath);
     const relativePath = path.relative(folderPath, absolutePath);
 
     if (tagsInFile) {
@@ -131,7 +131,7 @@ export async function getTag(
 /**
  * 给定文件路径，读取内容，检查其中是否包含标签
  */
-export const checkFileTags = async (filePath: string) => {
+export const extractFileTags = async (filePath: string) => {
   const content = await readFileContent(filePath);
   const matchedTags = checkTags(content);
   return matchedTags;

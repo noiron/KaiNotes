@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import { posix } from 'path';
 import { getTags, walk } from './utils';
-import { NodeDependenciesProvider } from './NodeDependenciesProvider';
 import { TagProvider } from './TagsProvider';
 import { FilesProvider } from './FilesProvider';
 
@@ -40,14 +39,6 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.workspace.workspaceFolders.length > 0
       ? vscode.workspace.workspaceFolders[0].uri.fsPath
       : undefined;
-  vscode.window.registerTreeDataProvider(
-    'nodeDependencies',
-    new NodeDependenciesProvider(rootPath as string)
-  );
-
-  vscode.window.createTreeView('nodeDependencies', {
-    treeDataProvider: new NodeDependenciesProvider(rootPath as string),
-  });
 
   vscode.window.createTreeView('tags', {
     treeDataProvider: new TagProvider(rootPath as string),

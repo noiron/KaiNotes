@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { getFileTitle, getTag, walk } from './utils';
+import { getFileTitle, getFilesContainTag, walk } from './utils';
 
 export class FilesProvider implements vscode.TreeDataProvider<FileItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<FileItem | undefined> =
@@ -42,7 +42,7 @@ export class FilesProvider implements vscode.TreeDataProvider<FileItem> {
     }
     const folderUri = workspaceFolders[0].uri;
     const list = await walk(folderUri);
-    const files = await getTag(folderUri.fsPath, list, tag);
+    const files = await getFilesContainTag(folderUri.fsPath, list, tag);
     const fileItems = files.map(async (file) => {
       const title = await getFileTitle(path.join(folderUri.fsPath, file));
 
