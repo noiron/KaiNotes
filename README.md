@@ -1,6 +1,8 @@
-# kainotes README
+# KaiNotes README
 
-This is the README for your extension "kainotes". After writing up a brief description, we recommend including the following sections.
+KaiNotes provides a simple way to organize your markdown notes. When you add tags in your markdown files, you can easily find them in the sidebar. The files that contain the tag are displayed below. 
+
+Tags are written like this: `#javascript #front-end #react`, starts with a hash symbol. You can add tag anywhere in your file. If you have used BearNotes before, you will find this function is similar.
 
 ## Features
 
