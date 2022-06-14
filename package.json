@@ -54,9 +54,22 @@
 			},
 			{
 				"command": "kainotes.refresh",
-				"title": "kainotes refresh"
+				"title": "KaiNotes Refresh",
+				"icon": {
+					"light": "media/light/refresh.svg",
+					"dark": "media/dark/refresh.svg"
+				}
 			}
-		]
+		],
+		"menus": {
+			"view/title": [
+				{
+					"command": "kainotes.refresh",
+					"when": "view == tags",
+					"group": "navigation"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "yarn run package",

@@ -4,6 +4,8 @@ KaiNotes provides a simple way to organize your markdown notes. When you add tag
 
 Tags are written like this: `#javascript #front-end #react`, starts with a hash symbol. You can add tag anywhere in your file. If you have used BearNotes before, you will find this function is similar.
 
+---
+
 ## Features
 
 Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.

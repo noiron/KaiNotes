@@ -40,8 +40,9 @@ export function activate(context: vscode.ExtensionContext) {
       ? vscode.workspace.workspaceFolders[0].uri.fsPath
       : undefined;
 
+  const tagProvider = new TagProvider(rootPath as string);
   vscode.window.createTreeView('tags', {
-    treeDataProvider: new TagProvider(rootPath as string),
+    treeDataProvider: tagProvider,
   });
 
   const filesForTagProvider = new FilesProvider(rootPath as string);
@@ -58,6 +59,11 @@ export function activate(context: vscode.ExtensionContext) {
       vscode.window.showTextDocument(resource);
     }
   );
+
+  vscode.commands.registerCommand('kainotes.refresh', () => {
+    tagProvider.refresh();
+    filesForTagProvider.refresh();
+  });
 }
 
 // this method is called when your extension is deactivated

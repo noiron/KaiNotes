@@ -3,7 +3,17 @@ import * as path from 'path';
 import { getTags, walk } from './utils';
 
 export class TagProvider implements vscode.TreeDataProvider<TagItem> {
+  private _onDidChangeTreeData: vscode.EventEmitter<TagItem | undefined> =
+    new vscode.EventEmitter<TagItem | undefined>();
+  readonly onDidChangeTreeData: vscode.Event<TagItem | undefined> =
+    this._onDidChangeTreeData.event;
+
   constructor(private workspaceRoot: string) {}
+
+  refresh(): void {
+    // @ts-ignore
+    this._onDidChangeTreeData.fire();
+  }
 
   getTreeItem(element: TagItem): vscode.TreeItem {
     return element;
@@ -56,8 +66,11 @@ class TagItem extends vscode.TreeItem {
     this.description = 'x ' + (this.num || 0);
   }
 
-  iconPath = {
-    light: path.join(__filename, '..', '..', 'media', 'light', 'label.svg'),
-    dark: path.join(__filename, '..', '..', 'media', 'dark', 'label.svg'),
-  };
+  // iconPath = {
+  //   light: path.join(__filename, '..', '..', 'media', 'light', 'label.svg'),
+  //   dark: path.join(__filename, '..', '..', 'media', 'dark', 'label.svg'),
+  // };
+
+  // https://code.visualstudio.com/api/references/icons-in-labels#icon-listing
+  iconPath = new vscode.ThemeIcon('tag');
 }
