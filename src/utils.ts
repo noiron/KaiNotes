@@ -157,3 +157,7 @@ export function isExcluded(filePath: string) {
   }
   return false;
 }
+
+export function sortByName(a: string, b: string) {
+  return a.localeCompare(b);
+}

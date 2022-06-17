@@ -16,7 +16,6 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:kainotes.helloWorld",
 		"onCommand:kainotes.tagCloud",
 		"onView:tags"
 	],
@@ -45,20 +44,13 @@
 		},
 		"commands": [
 			{
-				"command": "kainotes.helloWorld",
-				"title": "Hello World"
-			},
-			{
 				"command": "kainotes.tagCloud",
 				"title": "Tag Cloud"
 			},
 			{
 				"command": "kainotes.refresh",
 				"title": "KaiNotes Refresh",
-				"icon": {
-					"light": "media/light/refresh.svg",
-					"dark": "media/dark/refresh.svg"
-				}
+				"icon": "$(refresh)"
 			}
 		],
 		"menus": {
@@ -80,7 +72,9 @@
 		"watch-tests": "tsc -p . -w --outDir out",
 		"pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
 		"lint": "eslint src --ext ts",
-		"test": "node ./out/test/runTest.js"
+		"test": "node ./out/test/runTest.js",
+		"vsce:package": "vsce package",
+		"publish": "vsce publish"
 	},
 	"devDependencies": {
 		"@types/glob": "^7.2.0",

@@ -1,9 +1,6 @@
 # Change Log
 
-All notable changes to the "kainotes" extension will be documented in this file.
+0.0.2: Add refresh command.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+0.0.1: Initial release
 
-## [Unreleased]
-
-- Initial release

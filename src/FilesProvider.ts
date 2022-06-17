@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { getFileTitle, getFilesContainTag, walk } from './utils';
+import { getFileTitle, getFilesContainTag, walk, sortByName } from './utils';
 
 export class FilesProvider implements vscode.TreeDataProvider<FileItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<FileItem | undefined> =
@@ -43,7 +43,8 @@ export class FilesProvider implements vscode.TreeDataProvider<FileItem> {
     const folderUri = workspaceFolders[0].uri;
     const list = await walk(folderUri);
     const files = await getFilesContainTag(folderUri.fsPath, list, tag);
-    const fileItems = files.map(async (file) => {
+    // todo: 考虑按编辑时间排序
+    const fileItems = files.sort(sortByName).map(async (file) => {
       const title = await getFileTitle(path.join(folderUri.fsPath, file));
 
       return new FileItem(title, file, vscode.TreeItemCollapsibleState.None, {

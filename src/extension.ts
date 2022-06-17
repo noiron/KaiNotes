@@ -7,10 +7,6 @@ import { FilesProvider } from './FilesProvider';
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "kainotes" is now active!');
 
-  vscode.commands.registerCommand('kainotes.helloWorld', () => {
-    vscode.window.showInformationMessage('Hello World from KaiNotes!');
-  });
-
   vscode.commands.registerCommand('kainotes.tagCloud', async function () {
     const workspaceFolders = vscode.workspace.workspaceFolders;
     if (!workspaceFolders) {
@@ -92,12 +88,13 @@ function getWebviewContent(tags: any[] = []) {
       list: tags,
       gridSize: 5,
       fontFamily: 'Times, serif',
-      weightFactor: 16,
+      weightFactor: 10,
       color: 'random-dark',
       rotateRatio: 0,
       rotationSteps: 2,
       backgroundColor: '#fff',
-			minSize: 4
+			minSize: 4,
+      drawOutOfBound: true
     });
     </script>
 </body>
