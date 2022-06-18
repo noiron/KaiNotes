@@ -4,21 +4,17 @@ KaiNotes provides a simple way to organize your markdown notes. When you add tag
 
 Tags are written like this: `#javascript #front-end #react`, starts with a hash symbol. You can add tag anywhere in your file. If you have used BearNotes before, you will find this function is similar.
 
----
-
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+This is a screenshot when i used KaiNotes extension together with Markdown Preview Enhanced.
 
-For example if there is an image subfolder under your extension project workspace:
+![main](screenshots/main.png)
 
-\!\[feature X\]\(images/feature-x.png\)
+KaiNotes offer a command to display all your tags as tag cloud. Use ⇧⌘P to open command palette, select `Tag Cloud`, and you will see your own tag cloud.
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+![tag cloud](screenshots/tag-cloud.png)
 
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+---
 
 ## Extension Settings
 
@@ -30,10 +26,6 @@ This extension contributes the following settings:
 
 * `myExtension.enable`: enable/disable this extension
 * `myExtension.thing`: set to `blah` to do something
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
 
 ## Following extension guidelines
 
