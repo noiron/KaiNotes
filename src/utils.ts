@@ -14,10 +14,15 @@ export async function readFileContent(filePath: string): Promise<string> {
 }
 
 /**
- * 检查给定的内容中是否包含标签
+ * 检查给定的内容中是否包含标签，并提取出来
  */
 export const checkTags = (content: string) => {
-  return content.match(/(?<=(^|\s))#(?!(\s|#|!))([\S]+)/gm);
+  const tags = content.match(/(?<=^|\s)#(?!\s|#|!)([\S]+)/gm);
+  if (!tags) {
+    return null;
+  }
+  // 去除重复的标签
+  return [...new Set(tags.map(purifyTag))];
 };
 
 export interface Tags {
@@ -33,14 +38,12 @@ export async function getTags(fileList: string[]) {
   const tags: Tags = {};
   fileList = fileList.filter(isMarkdownFile);
   const promises = fileList.map(async (file) => {
-    if (!file.endsWith('.md')) {
+    if (!isMarkdownFile(file)) {
       return;
     }
-    const content = await readFileContent(file);
-    const matchedTags = checkTags(content);
+    const matchedTags = await extractFileTags(file);
     if (matchedTags) {
       matchedTags.forEach((t) => {
-        t = purifyTag(t);
         tags[t] = !tags[t] ? 1 : tags[t] + 1;
       });
     }
@@ -114,7 +117,7 @@ export async function getFilesContainTag(
 
     if (tagsInFile) {
       for (const tag of tagsInFile) {
-        if (purifyTag(tag) === searchTag) {
+        if (tag === searchTag) {
           list.push(relativePath);
           break;
         }
