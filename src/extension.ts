@@ -3,6 +3,7 @@ import { getTags, walk } from './utils';
 import { TagProvider } from './TagsProvider';
 import { FilesProvider } from './FilesProvider';
 import { getWebviewContent } from './webview';
+import { ALL_TAGS } from './constants';
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "kainotes" is now active!');
@@ -59,6 +60,11 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand('kainotes.refresh', () => {
     tagProvider.refresh();
     filesForTagProvider.refresh();
+  });
+
+  vscode.commands.registerCommand('kainotes.reset', () => {
+    filesForTagProvider.forTag(ALL_TAGS);
+    vscode.commands.executeCommand('kainotes.showTag', ALL_TAGS);
   });
 }
 

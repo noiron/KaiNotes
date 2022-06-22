@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { TextDecoder } from 'util';
 import * as path from 'path';
 import { posix } from 'path';
+import { ALL_TAGS } from './constants';
 
 /**
  * 给定一个文件地址，以字符串形式返回文件内容
@@ -115,7 +116,9 @@ export async function getFilesContainTag(
     const tagsInFile = await extractFileTags(absolutePath);
     const relativePath = path.relative(folderPath, absolutePath);
 
-    if (tagsInFile) {
+    if (searchTag === ALL_TAGS) {
+      list.push(relativePath);
+    } else if (tagsInFile) {
       for (const tag of tagsInFile) {
         if (tag === searchTag) {
           list.push(relativePath);

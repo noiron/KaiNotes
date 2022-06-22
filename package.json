@@ -51,6 +51,11 @@
 				"command": "kainotes.refresh",
 				"title": "KaiNotes Refresh",
 				"icon": "$(refresh)"
+			},
+			{
+				"command": "kainotes.reset",
+				"title": "KaiNotes Reset",
+				"icon": "$(clear-all)"
 			}
 		],
 		"menus": {
@@ -58,7 +63,12 @@
 				{
 					"command": "kainotes.refresh",
 					"when": "view == tags",
-					"group": "navigation"
+					"group": "navigation@10"
+				},
+				{
+					"command": "kainotes.reset",
+					"when": "view == tags",
+					"group": "navigation@1"
 				}
 			]
 		}

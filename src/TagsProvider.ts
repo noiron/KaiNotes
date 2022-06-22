@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { getTags, walk } from './utils';
+import { getTags, isMarkdownFile, walk } from './utils';
+import { ALL_TAGS } from './constants';
 
 export class TagProvider implements vscode.TreeDataProvider<TagItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<TagItem | undefined> =
@@ -21,7 +22,7 @@ export class TagProvider implements vscode.TreeDataProvider<TagItem> {
 
   getChildren(element?: TagItem): Thenable<TagItem[]> {
     if (!this.workspaceRoot) {
-      vscode.window.showInformationMessage('No dependency in empty workspace');
+      vscode.window.showInformationMessage('No tag in empty workspace');
       return Promise.resolve([]);
     }
 
@@ -42,9 +43,11 @@ export class TagProvider implements vscode.TreeDataProvider<TagItem> {
     const list = await walk(folderUri);
     const tags = await getTags(list);
     const sortTag = (tag1: string, tag2: string) => tags[tag2] - tags[tag1];
-    const keys = Object.keys(tags).sort(sortTag);
+    const keys = [ALL_TAGS, ...Object.keys(tags)].sort(sortTag);
+    const total = list.filter(isMarkdownFile).length;
     const tagList = keys.map((key) => {
-      return new TagItem(key, tags[key], vscode.TreeItemCollapsibleState.None, {
+      const count = key === ALL_TAGS ? total : tags[key];
+      return new TagItem(key, count, vscode.TreeItemCollapsibleState.None, {
         command: 'kainotes.showTag',
         title: 'Show',
         arguments: [key],
@@ -61,7 +64,11 @@ class TagItem extends vscode.TreeItem {
     public readonly collapsibleState: vscode.TreeItemCollapsibleState,
     public readonly command?: vscode.Command
   ) {
-    super(file, vscode.TreeItemCollapsibleState.Expanded);
+    super(
+      // ALL_TAGS is a special tag that represents all files.
+      file === ALL_TAGS ? 'ALL' : file,
+      vscode.TreeItemCollapsibleState.Expanded
+    );
     this.tooltip = `${this.file}`;
     this.description = 'x ' + (this.num || 0);
   }
