@@ -38,7 +38,7 @@ export function activate(context: vscode.ExtensionContext) {
       : undefined;
 
   const tagProvider = new TagProvider(rootPath as string);
-  vscode.window.createTreeView('tags', {
+  const tagTreeView = vscode.window.createTreeView('tags', {
     treeDataProvider: tagProvider,
   });
 
@@ -65,6 +65,10 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand('kainotes.reset', () => {
     filesForTagProvider.forTag(ALL_TAGS);
     vscode.commands.executeCommand('kainotes.showTag', ALL_TAGS);
+    tagTreeView.reveal(tagProvider.elements[ALL_TAGS], {
+      focus: true,
+      select: true,
+    });
   });
 }
 

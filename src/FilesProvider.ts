@@ -43,7 +43,6 @@ export class FilesProvider implements vscode.TreeDataProvider<FileItem> {
     const folderUri = workspaceFolders[0].uri;
     const list = await walk(folderUri);
     const files = await getFilesContainTag(folderUri.fsPath, list, tag);
-    // todo: 考虑按编辑时间排序
     const fileItems = files.sort((file1, file2) => sortFileByEditTime(
       path.join(folderUri.fsPath, file1),
       path.join(folderUri.fsPath, file2),

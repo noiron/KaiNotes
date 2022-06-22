@@ -11,6 +11,8 @@ export class TagProvider implements vscode.TreeDataProvider<TagItem> {
 
   constructor(private workspaceRoot: string) {}
 
+  elements: { [tag: string]: TagItem } = {};
+
   refresh(): void {
     // @ts-ignore
     this._onDidChangeTreeData.fire();
@@ -34,6 +36,10 @@ export class TagProvider implements vscode.TreeDataProvider<TagItem> {
     }
   }
 
+  getParent() {
+    return null;
+  }
+
   private async getTagsInThisFolder(): Promise<TagItem[]> {
     const workspaceFolders = vscode.workspace.workspaceFolders;
     if (!workspaceFolders) {
@@ -47,11 +53,18 @@ export class TagProvider implements vscode.TreeDataProvider<TagItem> {
     const total = list.filter(isMarkdownFile).length;
     const tagList = keys.map((key) => {
       const count = key === ALL_TAGS ? total : tags[key];
-      return new TagItem(key, count, vscode.TreeItemCollapsibleState.None, {
-        command: 'kainotes.showTag',
-        title: 'Show',
-        arguments: [key],
-      });
+      const element = new TagItem(
+        key,
+        count,
+        vscode.TreeItemCollapsibleState.None,
+        {
+          command: 'kainotes.showTag',
+          title: 'Show',
+          arguments: [key],
+        }
+      );
+      this.elements[key] = element;
+      return element;
     });
     return Promise.resolve(tagList);
   }
