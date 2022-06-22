@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { TextDecoder } from 'util';
 import * as path from 'path';
 import { posix } from 'path';
+import * as fs from 'fs';
 import { ALL_TAGS } from './constants';
 
 /**
@@ -166,4 +167,10 @@ export function isExcluded(filePath: string) {
 
 export function sortByName(a: string, b: string) {
   return a.localeCompare(b);
+}
+
+export function sortFileByEditTime(file1: any, file2: any) {
+  const info1 = fs.statSync(file1);
+  const info2 = fs.statSync(file2);
+  return info2.mtime.getTime() - info1.mtime.getTime();
 }
