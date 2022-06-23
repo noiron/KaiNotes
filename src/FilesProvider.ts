@@ -1,6 +1,12 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { getFileTitle, getFilesContainTag, walk, sortByName, sortFileByEditTime } from './utils';
+import {
+  getFileTitle,
+  getFilesContainTag,
+  walk,
+  sortFileByEditTime,
+} from './utils';
+import { UNTAGGED } from './constants';
 
 export class FilesProvider implements vscode.TreeDataProvider<FileItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<FileItem | undefined> =
@@ -40,21 +46,30 @@ export class FilesProvider implements vscode.TreeDataProvider<FileItem> {
     if (!workspaceFolders) {
       return [];
     }
+
+    if (tag === UNTAGGED) {
+      tag = '';
+    }
+
     const folderUri = workspaceFolders[0].uri;
     const list = await walk(folderUri);
     const files = await getFilesContainTag(folderUri.fsPath, list, tag);
-    const fileItems = files.sort((file1, file2) => sortFileByEditTime(
-      path.join(folderUri.fsPath, file1),
-      path.join(folderUri.fsPath, file2),
-    )).map(async (file) => {
-      const title = await getFileTitle(path.join(folderUri.fsPath, file));
+    const fileItems = files
+      .sort((file1, file2) =>
+        sortFileByEditTime(
+          path.join(folderUri.fsPath, file1),
+          path.join(folderUri.fsPath, file2)
+        )
+      )
+      .map(async (file) => {
+        const title = await getFileTitle(path.join(folderUri.fsPath, file));
 
-      return new FileItem(title, file, vscode.TreeItemCollapsibleState.None, {
-        command: 'kainotes.openFile',
-        arguments: [vscode.Uri.file(path.join(this.workspaceRoot, file))],
-        title: 'show in editor',
+        return new FileItem(title, file, vscode.TreeItemCollapsibleState.None, {
+          command: 'kainotes.openFile',
+          arguments: [vscode.Uri.file(path.join(this.workspaceRoot, file))],
+          title: 'show in editor',
+        });
       });
-    });
     return Promise.all(fileItems);
   }
 }

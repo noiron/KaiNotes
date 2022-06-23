@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { getTags, isMarkdownFile, walk } from './utils';
-import { ALL_TAGS } from './constants';
+import { ALL_TAGS, TAG_TEXT } from './constants';
 
 export class TagProvider implements vscode.TreeDataProvider<TagItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<TagItem | undefined> =
@@ -78,8 +78,8 @@ class TagItem extends vscode.TreeItem {
     public readonly command?: vscode.Command
   ) {
     super(
-      // ALL_TAGS is a special tag that represents all files.
-      file === ALL_TAGS ? 'ALL' : file,
+      // ALL_TAGS & UNTAGGED are special tags.
+      TAG_TEXT[file] ?? file,
       vscode.TreeItemCollapsibleState.Expanded
     );
     this.tooltip = `${this.file}`;

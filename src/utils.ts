@@ -3,7 +3,7 @@ import { TextDecoder } from 'util';
 import * as path from 'path';
 import { posix } from 'path';
 import * as fs from 'fs';
-import { ALL_TAGS } from './constants';
+import { ALL_TAGS, UNTAGGED } from './constants';
 
 /**
  * 给定一个文件地址，以字符串形式返回文件内容
@@ -48,6 +48,9 @@ export async function getTags(fileList: string[]) {
       matchedTags.forEach((t) => {
         tags[t] = !tags[t] ? 1 : tags[t] + 1;
       });
+    } else {
+      // count files that has no tag
+      tags[UNTAGGED] = !tags[UNTAGGED] ? 1 : tags[UNTAGGED] + 1;
     }
     return new Promise((resolve) => {
       resolve(true);
