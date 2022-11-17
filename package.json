@@ -45,7 +45,7 @@
 		"commands": [
 			{
 				"command": "kainotes.tagCloud",
-				"title": "Tag Cloud"
+				"title": "KaiNotes Tag Cloud"
 			},
 			{
 				"command": "kainotes.refresh",

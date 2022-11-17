@@ -19,7 +19,9 @@ export async function readFileContent(filePath: string): Promise<string> {
  * 检查给定的内容中是否包含标签，并提取出来
  */
 export const checkTags = (content: string) => {
-  const tags = content.match(/(?<=^|\s)#(?!\s|#|!)([\S]+)/gm);
+  // (?<=^|\s) positive lookbehind - hash must be start of a line or have space before it
+  // (?!\s|#|!|\d) negative lookahead - space, #, !, numbers can't be after hash
+  const tags = content.match(/(?<=^|\s)#(?!\s|#|!|\d)([\S]+)/gm);
   if (!tags) {
     return null;
   }

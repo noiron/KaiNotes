@@ -25,6 +25,7 @@ suite('Utils Test Suite', () => {
     `),
       ['js', 'java']
     );
+    assert.strictEqual(checkTags(`#123 http://fakeurl.com#456`), null);
   });
 
   test('Test isMarkdownFile() function', () => {
