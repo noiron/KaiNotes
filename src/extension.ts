@@ -3,7 +3,7 @@ import { getTags, walk } from './utils';
 import { TagProvider } from './TagsProvider';
 import { FilesProvider } from './FilesProvider';
 import { getWebviewContent } from './webview';
-import { ALL_TAGS } from './constants';
+import { ALL_TAGS, UNTAGGED } from './constants';
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "kainotes" is now active!');
@@ -17,7 +17,11 @@ export function activate(context: vscode.ExtensionContext) {
     const list = await walk(folderUri);
     const tags = await getTags(list);
     const keys = Object.keys(tags);
-    const tagList = keys.map((key) => [key, tags[key]]);
+    const tagList = keys
+      .map((key) => [key, tags[key]])
+      .filter(([key]) => {
+        return key !== UNTAGGED;
+      });
 
     const panel = vscode.window.createWebviewPanel(
       'tagCloud',
