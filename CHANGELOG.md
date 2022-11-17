@@ -1,5 +1,9 @@
 # Change Log
 
+0.0.5(2022-11-17):
+  - Remove "untagged" from tag cloud
+  - Exclude pure number tag
+
 0.0.4(2022-06-28):
   - Count all files and untagged files
   - Add code test
