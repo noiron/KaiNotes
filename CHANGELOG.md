@@ -1,5 +1,8 @@
 # Change Log
 
+0.0.6(2022-11-19)
+  - Can resize and refresh tag cloud now
+
 0.0.5(2022-11-17):
   - Remove "untagged" from tag cloud
   - Exclude pure number tag
