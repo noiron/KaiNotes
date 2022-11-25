@@ -17,7 +17,8 @@
 	],
 	"activationEvents": [
 		"onCommand:kainotes.tagCloud",
-		"onView:tags"
+		"onView:tags",
+		"onLanguage:markdown"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {

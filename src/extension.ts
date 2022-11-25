@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
-import { getTags, walk } from './utils';
+import { getTags, isMarkdownFile, walk } from './utils';
 import { TagProvider } from './TagsProvider';
 import { FilesProvider } from './FilesProvider';
 import { getWebviewContent } from './webview';
-import { ALL_TAGS, UNTAGGED } from './constants';
+import { ALL_TAGS, MARKDOWN_REGEX, UNTAGGED } from './constants';
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "kainotes" is now active!');
@@ -74,6 +74,38 @@ export function activate(context: vscode.ExtensionContext) {
       select: true,
     });
   });
+
+  context.subscriptions.push(
+    vscode.window.onDidChangeActiveTextEditor(() => decorateTags())
+  );
+
+  decorateTags();
+}
+
+function decorateTags() {
+  const editor = vscode.window.activeTextEditor!;
+  const document = editor.document;
+  if (!isMarkdownFile(document.uri.fsPath)) {
+    return;
+  }
+  const matches = document.getText().matchAll(MARKDOWN_REGEX);
+
+  const ranges = Array.from(matches).map((match) => {
+    const index1 = match.index || 0;
+    const index2 = index1 + match[0].length;
+    const startPos = editor.document.positionAt(index1);
+    const endPos = editor.document.positionAt(index2);
+    return new vscode.Range(startPos, endPos);
+  });
+
+  const decorationType = vscode.window.createTextEditorDecorationType({
+    borderRadius: '4px',
+    backgroundColor: '#d9ad00',
+    color: '#1f1f1f',
+    fontWeight: 'bold',
+  });
+
+  editor.setDecorations(decorationType, ranges);
 }
 
 // this method is called when your extension is deactivated

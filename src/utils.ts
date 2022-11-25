@@ -3,7 +3,7 @@ import { TextDecoder } from 'util';
 import * as path from 'path';
 import { posix } from 'path';
 import * as fs from 'fs';
-import { ALL_TAGS, UNTAGGED } from './constants';
+import { ALL_TAGS, MARKDOWN_REGEX, UNTAGGED } from './constants';
 
 /**
  * 给定一个文件地址，以字符串形式返回文件内容
@@ -19,9 +19,7 @@ export async function readFileContent(filePath: string): Promise<string> {
  * 检查给定的内容中是否包含标签，并提取出来
  */
 export const checkTags = (content: string) => {
-  // (?<=^|\s) positive lookbehind - hash must be start of a line or have space before it
-  // (?!\s|#|!|\d) negative lookahead - space, #, !, numbers can't be after hash
-  const tags = content.match(/(?<=^|\s)#(?!\s|#|!|\d)([\S]+)/gm);
+  const tags = content.match(MARKDOWN_REGEX);
   if (!tags) {
     return null;
   }
