@@ -94,7 +94,7 @@ export function activate(context: vscode.ExtensionContext) {
         // 这里每次输入都重复调用了？之后优化
         const list = await walk(folderUri);
         const tags = await getTags(list);
-        const keys = Object.keys(tags);
+        const keys = Object.keys(tags).filter(tag => tag !== UNTAGGED);
 
         return keys.map(
           (tag) =>

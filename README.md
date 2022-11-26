@@ -10,6 +10,10 @@ This is a screenshot when i used KaiNotes extension together with Markdown Previ
 
 ![main](screenshots/main.png)
 
+When you input `#`，extension will list all tags you have used for you to choose.
+
+![tag completion](screenshots/tag-completion.gif)
+
 KaiNotes offer a command to display all your tags as tag cloud. Use ⇧⌘P to open command palette, select `Tag Cloud`, and you will see your own tag cloud.
 
 ![tag cloud](screenshots/tag-cloud.png)
