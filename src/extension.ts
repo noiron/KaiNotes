@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { getTags, isMarkdownFile, walk } from './utils';
+import { getTags, isMarkdownFile, purifyTag, walk } from './utils';
 import { TagProvider } from './TagsProvider';
 import { FilesProvider } from './FilesProvider';
 import { getWebviewContent } from './webview';
@@ -57,6 +57,17 @@ export function activate(context: vscode.ExtensionContext) {
     filesForTagProvider.forTag(tag);
   });
 
+  vscode.commands.registerCommand('kainotes.searchTag', () => {
+    const editor = vscode.window.activeTextEditor;
+    const selectedText = editor?.document.getText(editor.selection);
+    if (!selectedText) {
+      return;
+    }
+    const tag = purifyTag(selectedText);
+    vscode.commands.executeCommand("filesForTag.focus");
+    filesForTagProvider.forTag(tag);
+  });
+
   vscode.commands.registerCommand(
     'kainotes.openFile',
     (resource: vscode.Uri) => {
@@ -94,7 +105,7 @@ export function activate(context: vscode.ExtensionContext) {
         // 这里每次输入都重复调用了？之后优化
         const list = await walk(folderUri);
         const tags = await getTags(list);
-        const keys = Object.keys(tags).filter(tag => tag !== UNTAGGED);
+        const keys = Object.keys(tags).filter((tag) => tag !== UNTAGGED);
 
         return keys.map(
           (tag) =>
