@@ -4,6 +4,7 @@ import { TagProvider } from './TagsProvider';
 import { FilesProvider } from './FilesProvider';
 import { getWebviewContent } from './webview';
 import { ALL_TAGS, MARKDOWN_REGEX, UNTAGGED } from './constants';
+import { HighlightConfig } from './types';
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "kainotes" is now active!');
@@ -84,6 +85,11 @@ export function activate(context: vscode.ExtensionContext) {
         if (!workspaceFolders) {
           return;
         }
+        const config = vscode.workspace.getConfiguration('kainotes');
+        if (!config.tagCompletion) {
+          return;
+        }
+
         const folderUri = workspaceFolders[0].uri;
         // 这里每次输入都重复调用了？之后优化
         const list = await walk(folderUri);
@@ -114,6 +120,14 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 function decorateTags() {
+  const config = vscode.workspace.getConfiguration('kainotes');
+  const highlight = config.get('highlight') as HighlightConfig;
+
+  const { enable, color = '#1f1f1f', backgroundColor = '#d9ad00' } = highlight;
+  if (!enable) {
+    return;
+  }
+
   const editor = vscode.window.activeTextEditor!;
   const document = editor.document;
   if (!isMarkdownFile(document.uri.fsPath)) {
@@ -131,8 +145,8 @@ function decorateTags() {
 
   const decorationType = vscode.window.createTextEditorDecorationType({
     borderRadius: '4px',
-    backgroundColor: '#d9ad00',
-    color: '#1f1f1f',
+    backgroundColor,
+    color,
     fontWeight: 'medium',
   });
 

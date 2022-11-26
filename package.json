@@ -8,7 +8,11 @@
 		"url": "https://github.com/noiron/kainotes.git"
 	},
 	"publisher": "noiron",
-	"keywords": ["markdown", "notes", "tags"],
+	"keywords": [
+		"markdown",
+		"notes",
+		"tags"
+	],
 	"engines": {
 		"vscode": "^1.67.0"
 	},
@@ -72,6 +76,34 @@
 					"group": "navigation@1"
 				}
 			]
+		},
+		"configuration": {
+			"title": "KaiNotes",
+			"properties": {
+				"kainotes.highlight.enable": {
+					"type": "boolean",
+					"default": true,
+					"description": "Enable highlight tag in files.",
+					"order": 0
+				},
+				"kainotes.highlight.color": {
+					"type": "string",
+					"default": "#1f1f1f",
+					"description": "Tag text color.",
+					"order": 1
+				},
+				"kainotes.highlight.backgroundColor": {
+					"type": "string",
+					"default": "#d9ad00",
+					"description": "Tag background color.",
+					"order": 2
+				},
+				"kainotes.tagCompletion": {
+					"type": "boolean",
+					"default": true,
+					"description": "Auto complete tag when input."
+				}
+			}
 		}
 	},
 	"scripts": {
