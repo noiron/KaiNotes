@@ -1,5 +1,9 @@
 # Change Log
 
+0.0.7(2022-11-26)
+  - Highlight tag
+  - Tag auto completion
+
 0.0.6(2022-11-19)
   - Can resize and refresh tag cloud now
 
