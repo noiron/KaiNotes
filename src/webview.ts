@@ -33,6 +33,7 @@ export function getWebviewContent(tags: any[] = []) {
     </div>
 
     <script>
+      const vscode = acquireVsCodeApi();
       const tags = ${JSON.stringify(tags)};
 
       let weightFactor = 5;
@@ -58,7 +59,14 @@ export function getWebviewContent(tags: any[] = []) {
           rotationSteps: 2,
           backgroundColor: '#fff',
           minSize: 4,
-          drawOutOfBound: true
+          drawOutOfBound: true,
+          click: (item) => {
+            const tag = item[0];
+            vscode.postMessage({
+              command: 'tag',
+              tag
+            });
+          },
         });
       }
   

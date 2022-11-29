@@ -36,6 +36,18 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
     panel.webview.html = getWebviewContent(tagList);
+
+    panel.webview.onDidReceiveMessage(
+      (message) => {
+        switch (message.command) {
+          case 'tag':
+            vscode.commands.executeCommand('filesForTag.focus');
+            vscode.commands.executeCommand('kainotes.showTag', message.tag);
+        }
+      },
+      undefined,
+      context.subscriptions
+    );
   });
 
   const rootPath =
@@ -64,7 +76,7 @@ export function activate(context: vscode.ExtensionContext) {
       return;
     }
     const tag = purifyTag(selectedText);
-    vscode.commands.executeCommand("filesForTag.focus");
+    vscode.commands.executeCommand('filesForTag.focus');
     filesForTagProvider.forTag(tag);
   });
 
