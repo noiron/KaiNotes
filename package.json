@@ -50,7 +50,8 @@
 		"commands": [
 			{
 				"command": "kainotes.tagCloud",
-				"title": "KaiNotes Tag Cloud"
+				"title": "KaiNotes Tag Cloud",
+				"icon": "$(compass)"
 			},
 			{
 				"command": "kainotes.refresh",
@@ -76,6 +77,11 @@
 				},
 				{
 					"command": "kainotes.reset",
+					"when": "view == tags",
+					"group": "navigation@9"
+				},
+				{
+					"command": "kainotes.tagCloud",
 					"when": "view == tags",
 					"group": "navigation@1"
 				}
