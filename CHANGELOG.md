@@ -1,5 +1,8 @@
 # Change Log
 
+0.0.8(2022-11-29)
+  - Click tag cloud can see what happens
+
 0.0.7(2022-11-26)
   - Highlight tag
   - Tag auto completion
