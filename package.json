@@ -2,7 +2,7 @@
 	"name": "kainotes",
 	"displayName": "KaiNotes",
 	"description": "A VSCode extension to manage your markdown files by tags",
-	"version": "0.0.8",
+	"version": "0.0.9",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/noiron/kainotes.git"

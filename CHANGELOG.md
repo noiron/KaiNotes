@@ -1,5 +1,8 @@
 # Change Log
 
+0.0.9(2022-11-30)
+  - Show icon for tag cloud on view/title menu
+
 0.0.8(2022-11-29)
   - Click tag cloud can see what happens
 
