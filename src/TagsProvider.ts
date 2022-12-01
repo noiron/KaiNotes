@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import { getTags, isMarkdownFile, walk } from './utils';
 import { ALL_TAGS, TAG_TEXT } from './constants';
+import dataSource from './DataSource';
 
 export class TagProvider implements vscode.TreeDataProvider<TagItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<TagItem | undefined> =
@@ -45,12 +46,12 @@ export class TagProvider implements vscode.TreeDataProvider<TagItem> {
     if (!workspaceFolders) {
       return [];
     }
-    const folderUri = workspaceFolders[0].uri;
-    const list = await walk(folderUri);
-    const tags = await getTags(list);
+    await dataSource.update();
+    const { tags, fileList, tagKeys } = dataSource;
+
     const sortTag = (tag1: string, tag2: string) => tags[tag2] - tags[tag1];
-    const keys = [ALL_TAGS, ...Object.keys(tags)].sort(sortTag);
-    const total = list.filter(isMarkdownFile).length;
+    const keys = [ALL_TAGS, ...tagKeys].sort(sortTag);
+    const total = fileList.filter(isMarkdownFile).length;
     const tagList = keys.map((key) => {
       const count = key === ALL_TAGS ? total : tags[key];
       const element = new TagItem(

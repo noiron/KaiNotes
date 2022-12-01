@@ -3,8 +3,9 @@ import { getTags, isMarkdownFile, purifyTag, walk } from './utils';
 import { TagProvider } from './TagsProvider';
 import { FilesProvider } from './FilesProvider';
 import { getWebviewContent } from './webview';
-import { ALL_TAGS, MARKDOWN_REGEX, UNTAGGED } from './constants';
+import { ALL_TAGS, MARKDOWN_REGEX } from './constants';
 import { HighlightConfig } from './types';
+import dataSource from './DataSource';
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "kainotes" is now active!');
@@ -12,19 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
   const workspaceFolders = vscode.workspace.workspaceFolders;
 
   vscode.commands.registerCommand('kainotes.tagCloud', async function () {
-    // const workspaceFolders = vscode.workspace.workspaceFolders;
-    if (!workspaceFolders) {
-      return vscode.window.showInformationMessage('Open a folder first');
-    }
-    const folderUri = workspaceFolders[0].uri;
-    const list = await walk(folderUri);
-    const tags = await getTags(list);
-    const keys = Object.keys(tags);
-    const tagList = keys
-      .map((key) => [key, tags[key]])
-      .filter(([key]) => {
-        return key !== UNTAGGED;
-      });
+    await dataSource.update();
 
     const panel = vscode.window.createWebviewPanel(
       'tagCloud',
@@ -35,7 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
       }
     );
 
-    panel.webview.html = getWebviewContent(tagList);
+    panel.webview.html = getWebviewContent(dataSource.tagList);
 
     panel.webview.onDidReceiveMessage(
       (message) => {
@@ -113,13 +102,10 @@ export function activate(context: vscode.ExtensionContext) {
           return;
         }
 
-        const folderUri = workspaceFolders[0].uri;
-        // 这里每次输入都重复调用了？之后优化
-        const list = await walk(folderUri);
-        const tags = await getTags(list);
-        const keys = Object.keys(tags).filter((tag) => tag !== UNTAGGED);
+        // 这里每次输入都重复调用了，之后优化
+        dataSource.update();
 
-        return keys.map(
+        return dataSource.tagKeys.map(
           (tag) =>
             new vscode.CompletionItem(
               tag,
