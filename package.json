@@ -66,6 +66,11 @@
 			{
 				"command": "kainotes.searchTag",
 				"title": "KaiNotes Search Tag"
+			},
+			{
+				"command": "kainotes.toggleSortMethod",
+				"title": "KaiNotes Toggle Sort Method",
+				"icon": "$(issues)"
 			}
 		],
 		"menus": {
@@ -84,6 +89,11 @@
 					"command": "kainotes.tagCloud",
 					"when": "view == tags",
 					"group": "navigation@1"
+				},
+				{
+					"command": "kainotes.toggleSortMethod",
+					"when": "view == tags",
+					"group": "navigation@2"
 				}
 			],
 			"editor/context": [

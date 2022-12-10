@@ -1,11 +1,14 @@
 import * as vscode from 'vscode';
-import { getTags, isMarkdownFile, purifyTag, walk } from './utils';
+import { isMarkdownFile, purifyTag } from './utils';
 import { TagProvider } from './TagsProvider';
 import { FilesProvider } from './FilesProvider';
 import { getWebviewContent } from './webview';
-import { ALL_TAGS, MARKDOWN_REGEX } from './constants';
+import { ALL_TAGS, MARKDOWN_REGEX, SORT_METHOD, UNTAGGED } from './constants';
 import { HighlightConfig } from './types';
 import dataSource from './DataSource';
+
+export let sortMethod: typeof SORT_METHOD[keyof typeof SORT_METHOD] =
+  SORT_METHOD.quantity;
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "kainotes" is now active!');
@@ -88,6 +91,14 @@ export function activate(context: vscode.ExtensionContext) {
       focus: true,
       select: true,
     });
+  });
+
+  vscode.commands.registerCommand('kainotes.toggleSortMethod', () => {
+    sortMethod =
+      sortMethod === SORT_METHOD.quantity
+        ? SORT_METHOD.name
+        : SORT_METHOD.quantity;
+    tagProvider.refresh();
   });
 
   const completion = vscode.languages.registerCompletionItemProvider(

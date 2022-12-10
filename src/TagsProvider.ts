@@ -1,8 +1,9 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { getTags, isMarkdownFile, walk } from './utils';
-import { ALL_TAGS, TAG_TEXT } from './constants';
+import { ALL_TAGS, SORT_METHOD, TAG_TEXT } from './constants';
 import dataSource from './DataSource';
+import { sortMethod } from './extension';
 
 export class TagProvider implements vscode.TreeDataProvider<TagItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<TagItem | undefined> =
@@ -49,8 +50,15 @@ export class TagProvider implements vscode.TreeDataProvider<TagItem> {
     await dataSource.update();
     const { tags, fileList, tagKeys } = dataSource;
 
-    const sortTag = (tag1: string, tag2: string) => tags[tag2] - tags[tag1];
-    const keys = [ALL_TAGS, ...tagKeys].sort(sortTag);
+    const sortTagByQuantity = (tag1: string, tag2: string) =>
+      tags[tag2] - tags[tag1];
+    const keys = [ALL_TAGS, ...tagKeys];
+    if (sortMethod === SORT_METHOD.name) {
+      keys.sort(sortByName);
+    } else {
+      keys.sort(sortTagByQuantity);
+    }
+
     const total = fileList.filter(isMarkdownFile).length;
     const tagList = keys.map((key) => {
       const count = key === ALL_TAGS ? total : tags[key];
@@ -94,4 +102,20 @@ class TagItem extends vscode.TreeItem {
 
   // https://code.visualstudio.com/api/references/icons-in-labels#icon-listing
   iconPath = new vscode.ThemeIcon('tag');
+}
+
+// https://www.cnblogs.com/frank-link/p/15661377.html
+function sortByName(a: string, b: string) {
+  const reg = /[a-zA-Z0-9]/;
+  if (reg.test(a[0]) || reg.test(b[0])) {
+    if (a > b) {
+      return 1;
+    } else if (a < b) {
+      return -1;
+    } else {
+      return 0;
+    }
+  } else {
+    return a.localeCompare(b, 'zh');
+  }
 }
