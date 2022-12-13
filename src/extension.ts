@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { posix } from 'path';
 import { isMarkdownFile, purifyTag } from './utils';
 import { TagProvider } from './TagsProvider';
 import { FilesProvider } from './FilesProvider';
@@ -101,6 +102,33 @@ export function activate(context: vscode.ExtensionContext) {
     tagProvider.refresh();
   });
 
+  vscode.commands.registerCommand('kainotes.summary', async () => {
+    if (!vscode.workspace.workspaceFolders) {
+      return vscode.window.showInformationMessage(
+        'No folder or workspace opened'
+      );
+    }
+
+    await dataSource.update();
+    const { fileList, tagKeys } = dataSource;
+    const writeStr = `共有 ${fileList.length} 个文件、${tagKeys.length} 个标签
+所有的标签包括：${tagKeys.join(', ')}
+`;
+    const writeData = Buffer.from(writeStr, 'utf8');
+
+    const folderUri = vscode.workspace.workspaceFolders[0].uri;
+    const fileUri = folderUri.with({
+      path: posix.join(folderUri.path, '.kainotes/summary.txt'),
+    });
+
+    await vscode.workspace.fs.writeFile(fileUri, writeData);
+
+    // const readData = await vscode.workspace.fs.readFile(fileUri);
+    // const readStr = Buffer.from(readData).toString('utf8');
+    // vscode.window.showInformationMessage(readStr);
+    vscode.window.showTextDocument(fileUri);
+  });
+
   const completion = vscode.languages.registerCompletionItemProvider(
     'markdown',
     {
@@ -149,6 +177,9 @@ function decorateTags() {
   }
 
   const editor = vscode.window.activeTextEditor!;
+  if (!editor) {
+    return;
+  }
   const document = editor.document;
   if (!isMarkdownFile(document.uri.fsPath)) {
     return;

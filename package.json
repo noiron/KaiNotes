@@ -22,7 +22,8 @@
 	"activationEvents": [
 		"onCommand:kainotes.tagCloud",
 		"onView:tags",
-		"onLanguage:markdown"
+		"onLanguage:markdown",
+		"onCommand:kainotes.summary"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
@@ -71,6 +72,10 @@
 				"command": "kainotes.toggleSortMethod",
 				"title": "KaiNotes Toggle Sort Method",
 				"icon": "$(issues)"
+			},
+			{
+				"command": "kainotes.summary",
+				"title": "KaiNotes Summary"
 			}
 		],
 		"menus": {
