@@ -1,5 +1,9 @@
 # Change Log
 
+0.0.10(2022-12-13)
+  - Sort tags by name
+  - Rename tag
+
 0.0.9(2022-11-30)
   - Show icon for tag cloud on view/title menu
 
