@@ -147,6 +147,9 @@ export function activate(context: vscode.ExtensionContext) {
       title: 'Please input new tag',
       value: tag,
     });
+    if (!newTag || tag === newTag) {
+      return;
+    }
 
     files.forEach(async (relativePath) => {
       const absolutePath = path.join(folderUri.fsPath, relativePath);
