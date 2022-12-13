@@ -76,6 +76,10 @@
 			{
 				"command": "kainotes.summary",
 				"title": "KaiNotes Summary"
+			},
+			{
+				"command": "kainotes.renameTag",
+				"title": "KaiNotes Rename Tag"
 			}
 		],
 		"menus": {
@@ -105,6 +109,12 @@
 				{
 					"command": "kainotes.searchTag",
 					"when": "editorHasSelection"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "kainotes.renameTag",
+					"when": "view == tags"
 				}
 			]
 		},

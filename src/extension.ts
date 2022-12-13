@@ -1,6 +1,13 @@
 import * as vscode from 'vscode';
 import { posix } from 'path';
-import { isMarkdownFile, purifyTag } from './utils';
+import * as path from 'path';
+import * as fs from 'fs';
+import {
+  getFilesContainTag,
+  isMarkdownFile,
+  purifyTag,
+  readFileContent,
+} from './utils';
 import { TagProvider } from './TagsProvider';
 import { FilesProvider } from './FilesProvider';
 import { getWebviewContent } from './webview';
@@ -111,6 +118,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     await dataSource.update();
     const { fileList, tagKeys } = dataSource;
+    // TODO: more summary todo
     const writeStr = `共有 ${fileList.length} 个文件、${tagKeys.length} 个标签
 所有的标签包括：${tagKeys.join(', ')}
 `;
@@ -127,6 +135,31 @@ export function activate(context: vscode.ExtensionContext) {
     // const readStr = Buffer.from(readData).toString('utf8');
     // vscode.window.showInformationMessage(readStr);
     vscode.window.showTextDocument(fileUri);
+  });
+
+  vscode.commands.registerCommand('kainotes.renameTag', async (tagItem) => {
+    const tag = tagItem.label;
+    const workspaceFolders = vscode.workspace.workspaceFolders!;
+    const folderUri = workspaceFolders[0].uri;
+    const { fileList } = dataSource;
+    const files = await getFilesContainTag(folderUri.fsPath, fileList, tag);
+    const newTag = await vscode.window.showInputBox({
+      title: 'Please input new tag',
+      value: tag,
+    });
+
+    files.forEach(async (relativePath) => {
+      const absolutePath = path.join(folderUri.fsPath, relativePath);
+      const content = await readFileContent(absolutePath);
+      const newContent = content.replace('#' + tag, '#' + newTag);
+      fs.writeFileSync(absolutePath, newContent);
+    });
+
+    vscode.window.showInformationMessage(
+      `Rename tag "${tag}" to "${newTag}" in ${files.length} file${
+        files.length > 1 ? 's' : ''
+      }`
+    );
   });
 
   const completion = vscode.languages.registerCompletionItemProvider(
