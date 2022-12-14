@@ -1,5 +1,8 @@
 # Change Log
 
+0.0.11(2022-12-14)
+  - Bugfix: When renaming a tag, if no new tag is entered, it will be replaced with "undefined"
+
 0.0.10(2022-12-13)
   - Sort tags by name
   - Rename tag
