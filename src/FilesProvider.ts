@@ -2,10 +2,11 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import {
   getFileTitle,
-  getFilesContainTag,
   walk,
   sortFileByEditTime,
+  extractFileTags,
 } from './utils';
+import { getFilesContainTag } from 'kainotes-tools';
 import { UNTAGGED } from './constants';
 
 export class FilesProvider implements vscode.TreeDataProvider<FileItem> {
@@ -53,7 +54,12 @@ export class FilesProvider implements vscode.TreeDataProvider<FileItem> {
 
     const folderUri = workspaceFolders[0].uri;
     const list = await walk(folderUri);
-    const files = await getFilesContainTag(folderUri.fsPath, list, tag);
+    const files = await getFilesContainTag(
+      folderUri.fsPath,
+      list,
+      tag,
+      extractFileTags
+    );
     const fileItems = files
       .sort((file1, file2) =>
         sortFileByEditTime(

@@ -177,6 +177,6 @@
 		"webpack-cli": "^4.9.2"
 	},
 	"dependencies": {
-		"kainotes-tools": "^0.0.4"
+		"kainotes-tools": "^0.0.5"
 	}
 }
