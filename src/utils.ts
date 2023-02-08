@@ -3,6 +3,11 @@ import { TextDecoder } from 'util';
 import * as path from 'path';
 import { posix } from 'path';
 import * as fs from 'fs';
+import {
+  extractTitleFromContent,
+  isMarkdownFile,
+  purifyTag,
+} from 'kainotes-tools';
 import { ALL_TAGS, MARKDOWN_REGEX, UNTAGGED } from './constants';
 
 /**
@@ -59,27 +64,6 @@ export async function getTags(fileList: string[]) {
   await Promise.all(promises);
   return tags;
 }
-
-/**
- * 在标签文字的获取过程中，可能会带上开头的 #，统一用这个函数去处理
- */
-export const purifyTag = (tag: string) => {
-  if (typeof tag !== 'string' || tag.length === 0) {
-    return '';
-  }
-  if (tag[0] !== '#') {
-    return tag;
-  }
-  return tag.slice(1);
-};
-
-/**
- * 判断一个文件是否为 markdown 文件
- */
-export const isMarkdownFile = (filePath: string) => {
-  const extname = path.extname(filePath).toLowerCase();
-  return extname === '.md' || extname === '.markdown';
-};
 
 export async function walk(folder: vscode.Uri): Promise<string[]> {
   const list: string[] = [];
@@ -153,12 +137,7 @@ export const extractFileTags = async (filePath: string) => {
  */
 export async function getFileTitle(filePath: string) {
   const content = await readFileContent(filePath);
-  const lines = content.split('\n');
-  const firstLine = lines[0];
-  if (firstLine.startsWith('# ')) {
-    return firstLine.substring(2).trim();
-  }
-  return '';
+  return extractTitleFromContent(content);
 }
 
 export function isExcluded(filePath: string) {

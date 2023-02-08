@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import * as path from 'path';
-import { getTags, isMarkdownFile, walk } from './utils';
+// import * as path from 'path';
+import { isMarkdownFile } from 'kainotes-tools';
 import { ALL_TAGS, SORT_METHOD, TAG_TEXT } from './constants';
 import dataSource from './DataSource';
 import { sortMethod } from './extension';

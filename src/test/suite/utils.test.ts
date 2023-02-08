@@ -1,13 +1,8 @@
 import * as assert from 'assert';
 import * as fs from 'fs';
 import * as vscode from 'vscode';
-import {
-  checkTags,
-  extractFileTags,
-  getFileTitle,
-  isMarkdownFile,
-  purifyTag,
-} from '../../utils';
+import { checkTags, extractFileTags, getFileTitle } from '../../utils';
+import { isMarkdownFile, purifyTag } from 'kainotes-tools';
 
 suite('Utils Test Suite', () => {
   test('Test purifyTag() function', () => {

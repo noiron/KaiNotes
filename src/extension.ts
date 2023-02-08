@@ -2,12 +2,8 @@ import * as vscode from 'vscode';
 import { posix } from 'path';
 import * as path from 'path';
 import * as fs from 'fs';
-import {
-  getFilesContainTag,
-  isMarkdownFile,
-  purifyTag,
-  readFileContent,
-} from './utils';
+import { getFilesContainTag, readFileContent } from './utils';
+import { isMarkdownFile, purifyTag } from 'kainotes-tools';
 import { TagProvider } from './TagsProvider';
 import { FilesProvider } from './FilesProvider';
 import { getWebviewContent } from './webview';

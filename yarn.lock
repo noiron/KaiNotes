@@ -1287,6 +1287,11 @@ json-stable-stringify-without-jsonify@^1.0.1:
   resolved "https://registry.npmjs.org/json-stable-stringify-without-jsonify/-/json-stable-stringify-without-jsonify-1.0.1.tgz#9db7b59496ad3f3cfef30a75142d2d930ad72651"
   integrity sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==
 
+kainotes-tools@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.npmjs.org/kainotes-tools/-/kainotes-tools-0.0.3.tgz#880bfa4452cb064d4944788682bf1118d97d0d27"
+  integrity sha512-RvnNVQRogylZeAvwunjzBBw08AQs44608JXL8lOgKPi9HU2ktdKSsR7KAe8rdJn0MnX0ioko5prcBwRqAQNySA==
+
 kind-of@^6.0.2:
   version "6.0.3"
   resolved "https://registry.npmjs.org/kind-of/-/kind-of-6.0.3.tgz#07c05034a6c349fa06e24fa35aa76db4580ce4dd"
