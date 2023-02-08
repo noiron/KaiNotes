@@ -4,9 +4,9 @@ import * as path from 'path';
 import { posix } from 'path';
 import * as fs from 'fs';
 import {
+  extractTagsFromContent,
   extractTitleFromContent,
   isMarkdownFile,
-  purifyTag,
 } from 'kainotes-tools';
 import { ALL_TAGS, MARKDOWN_REGEX, UNTAGGED } from './constants';
 
@@ -19,18 +19,6 @@ export async function readFileContent(filePath: string): Promise<string> {
   const content = await vscode.workspace.fs.readFile(vscode.Uri.file(filePath));
   return new TextDecoder().decode(content);
 }
-
-/**
- * 检查给定的内容中是否包含标签，并提取出来
- */
-export const checkTags = (content: string) => {
-  const tags = content.match(MARKDOWN_REGEX);
-  if (!tags) {
-    return null;
-  }
-  // 去除重复的标签
-  return [...new Set(tags.map(purifyTag))];
-};
 
 export interface Tags {
   [tag: string]: number;
@@ -127,8 +115,7 @@ export async function getFilesContainTag(
  */
 export const extractFileTags = async (filePath: string) => {
   const content = await readFileContent(filePath);
-  const matchedTags = checkTags(content);
-  return matchedTags;
+  return extractTagsFromContent(content);
 };
 
 /**

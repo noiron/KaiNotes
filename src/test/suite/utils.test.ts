@@ -1,8 +1,12 @@
 import * as assert from 'assert';
 import * as fs from 'fs';
 import * as vscode from 'vscode';
-import { checkTags, extractFileTags, getFileTitle } from '../../utils';
-import { isMarkdownFile, purifyTag } from 'kainotes-tools';
+import { extractFileTags, getFileTitle } from '../../utils';
+import {
+  isMarkdownFile,
+  purifyTag,
+  extractTagsFromContent,
+} from 'kainotes-tools';
 
 suite('Utils Test Suite', () => {
   test('Test purifyTag() function', () => {
@@ -10,17 +14,20 @@ suite('Utils Test Suite', () => {
     assert.strictEqual(purifyTag('js'), 'js');
   });
 
-  test('Test checkTags() function', () => {
-    assert.deepStrictEqual(checkTags('#js'), ['js']);
-    assert.deepStrictEqual(checkTags('#js #java'), ['js', 'java']);
-    assert.deepStrictEqual(checkTags('#js test#python'), ['js']);
+  test('Test extractTagsFromContent() function', () => {
+    assert.deepStrictEqual(extractTagsFromContent('#js'), ['js']);
+    assert.deepStrictEqual(extractTagsFromContent('#js #java'), ['js', 'java']);
+    assert.deepStrictEqual(extractTagsFromContent('#js test#python'), ['js']);
     assert.deepStrictEqual(
-      checkTags(`#js
+      extractTagsFromContent(`#js
       something here #java bla bla bla
     `),
       ['js', 'java']
     );
-    assert.strictEqual(checkTags(`#123 http://fakeurl.com#456`), null);
+    assert.strictEqual(
+      extractTagsFromContent(`#123 http://fakeurl.com#456`),
+      null
+    );
   });
 
   test('Test isMarkdownFile() function', () => {
