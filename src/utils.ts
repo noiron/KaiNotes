@@ -3,11 +3,7 @@ import { TextDecoder } from 'util';
 import * as path from 'path';
 import { posix } from 'path';
 import * as fs from 'fs';
-import {
-  extractTagsFromContent,
-  extractTitleFromContent,
-  isMarkdownFile,
-} from 'kainotes-tools';
+import { isMarkdownFile, extractFileTags } from 'kainotes-tools';
 import { ALL_TAGS, MARKDOWN_REGEX, UNTAGGED } from './constants';
 
 /**
@@ -36,7 +32,7 @@ export async function getTags(fileList: string[]) {
     if (!isMarkdownFile(file)) {
       return;
     }
-    const matchedTags = await extractFileTags(file);
+    const matchedTags = await extractFileTags(file, readFileContent);
     if (matchedTags) {
       matchedTags.forEach((t) => {
         tags[t] = !tags[t] ? 1 : tags[t] + 1;
@@ -110,22 +106,22 @@ export async function walk(folder: vscode.Uri): Promise<string[]> {
 //   return list;
 // }
 
-/**
- * 给定文件路径，读取内容，检查其中是否包含标签
- */
-export const extractFileTags = async (filePath: string) => {
-  const content = await readFileContent(filePath);
-  return extractTagsFromContent(content);
-};
+// /**
+//  * 给定文件路径，读取内容，检查其中是否包含标签
+//  */
+// export const extractFileTags = async (filePath: string) => {
+//   const content = await readFileContent(filePath);
+//   return extractTagsFromContent(content) || [];
+// };
 
-/**
- * 从文件内容中获得文件标题，一般为文件的第一行，以 # 开头
- * @param {string} filePath
- */
-export async function getFileTitle(filePath: string) {
-  const content = await readFileContent(filePath);
-  return extractTitleFromContent(content);
-}
+// /**
+//  * 从文件内容中获得文件标题，一般为文件的第一行，以 # 开头
+//  * @param {string} filePath
+//  */
+// export async function getFileTitle(filePath: string) {
+//   const content = await readFileContent(filePath);
+//   return extractTitleFromContent(content);
+// }
 
 export function isExcluded(filePath: string) {
   if (/node_modules/.test(filePath)) {

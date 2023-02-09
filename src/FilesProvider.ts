@@ -1,12 +1,11 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import {
-  getFileTitle,
   walk,
   sortFileByEditTime,
-  extractFileTags,
+  readFileContent,
 } from './utils';
-import { getFilesContainTag } from 'kainotes-tools';
+import { getFilesContainTag, extractFileTitle } from 'kainotes-tools';
 import { UNTAGGED } from './constants';
 
 export class FilesProvider implements vscode.TreeDataProvider<FileItem> {
@@ -58,7 +57,7 @@ export class FilesProvider implements vscode.TreeDataProvider<FileItem> {
       folderUri.fsPath,
       list,
       tag,
-      extractFileTags
+      readFileContent
     );
     const fileItems = files
       .sort((file1, file2) =>
@@ -68,7 +67,10 @@ export class FilesProvider implements vscode.TreeDataProvider<FileItem> {
         )
       )
       .map(async (file) => {
-        const title = await getFileTitle(path.join(folderUri.fsPath, file));
+        const title = await extractFileTitle(
+          path.join(folderUri.fsPath, file),
+          readFileContent
+        );
 
         return new FileItem(title, file, vscode.TreeItemCollapsibleState.None, {
           command: 'kainotes.openFile',

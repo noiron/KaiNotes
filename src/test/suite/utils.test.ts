@@ -1,12 +1,14 @@
 import * as assert from 'assert';
 import * as fs from 'fs';
 import * as vscode from 'vscode';
-import { extractFileTags, getFileTitle } from '../../utils';
 import {
   isMarkdownFile,
   purifyTag,
   extractTagsFromContent,
+  extractFileTags,
+  extractFileTitle,
 } from 'kainotes-tools';
+import { readFileContent } from '../../utils';
 
 suite('Utils Test Suite', () => {
   test('Test purifyTag() function', () => {
@@ -41,7 +43,7 @@ suite('Utils Test Suite', () => {
 
   test('Test extractFileTags() Function', async () => {
     const filePath = process.cwd() + '/src/test/files-for-test/index.md';
-    assert.deepStrictEqual(await extractFileTags(filePath), [
+    assert.deepStrictEqual(await extractFileTags(filePath, readFileContent), [
       'vscode',
       'javascript',
     ]);
@@ -50,7 +52,7 @@ suite('Utils Test Suite', () => {
   test('Test getFileTitle() Function', async () => {
     const filePath = process.cwd() + '/src/test/files-for-test/index.md';
     assert.strictEqual(
-      await getFileTitle(filePath),
+      await extractFileTitle(filePath, readFileContent),
       'This is a markdown file for test'
     );
   });
