@@ -2,12 +2,12 @@ import * as vscode from 'vscode';
 import { posix } from 'path';
 import * as path from 'path';
 import * as fs from 'fs';
+import { readFileContent } from './utils';
 import {
-  getFilesContainTag,
   isMarkdownFile,
   purifyTag,
-  readFileContent,
-} from './utils';
+  getFilesContainTag,
+} from 'kainotes-tools';
 import { TagProvider } from './TagsProvider';
 import { FilesProvider } from './FilesProvider';
 import { getWebviewContent } from './webview';
@@ -142,7 +142,12 @@ export function activate(context: vscode.ExtensionContext) {
     const workspaceFolders = vscode.workspace.workspaceFolders!;
     const folderUri = workspaceFolders[0].uri;
     const { fileList } = dataSource;
-    const files = await getFilesContainTag(folderUri.fsPath, fileList, tag);
+    const files = await getFilesContainTag(
+      folderUri.fsPath,
+      fileList,
+      tag,
+      readFileContent
+    );
     const newTag = await vscode.window.showInputBox({
       title: 'Please input new tag',
       value: tag,

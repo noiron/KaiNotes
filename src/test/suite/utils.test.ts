@@ -2,12 +2,13 @@ import * as assert from 'assert';
 import * as fs from 'fs';
 import * as vscode from 'vscode';
 import {
-  checkTags,
-  extractFileTags,
-  getFileTitle,
   isMarkdownFile,
   purifyTag,
-} from '../../utils';
+  extractTagsFromContent,
+  extractFileTags,
+  extractFileTitle,
+} from 'kainotes-tools';
+import { readFileContent } from '../../utils';
 
 suite('Utils Test Suite', () => {
   test('Test purifyTag() function', () => {
@@ -15,17 +16,20 @@ suite('Utils Test Suite', () => {
     assert.strictEqual(purifyTag('js'), 'js');
   });
 
-  test('Test checkTags() function', () => {
-    assert.deepStrictEqual(checkTags('#js'), ['js']);
-    assert.deepStrictEqual(checkTags('#js #java'), ['js', 'java']);
-    assert.deepStrictEqual(checkTags('#js test#python'), ['js']);
+  test('Test extractTagsFromContent() function', () => {
+    assert.deepStrictEqual(extractTagsFromContent('#js'), ['js']);
+    assert.deepStrictEqual(extractTagsFromContent('#js #java'), ['js', 'java']);
+    assert.deepStrictEqual(extractTagsFromContent('#js test#python'), ['js']);
     assert.deepStrictEqual(
-      checkTags(`#js
+      extractTagsFromContent(`#js
       something here #java bla bla bla
     `),
       ['js', 'java']
     );
-    assert.strictEqual(checkTags(`#123 http://fakeurl.com#456`), null);
+    assert.strictEqual(
+      extractTagsFromContent(`#123 http://fakeurl.com#456`),
+      null
+    );
   });
 
   test('Test isMarkdownFile() function', () => {
@@ -39,7 +43,7 @@ suite('Utils Test Suite', () => {
 
   test('Test extractFileTags() Function', async () => {
     const filePath = process.cwd() + '/src/test/files-for-test/index.md';
-    assert.deepStrictEqual(await extractFileTags(filePath), [
+    assert.deepStrictEqual(await extractFileTags(filePath, readFileContent), [
       'vscode',
       'javascript',
     ]);
@@ -48,7 +52,7 @@ suite('Utils Test Suite', () => {
   test('Test getFileTitle() Function', async () => {
     const filePath = process.cwd() + '/src/test/files-for-test/index.md';
     assert.strictEqual(
-      await getFileTitle(filePath),
+      await extractFileTitle(filePath, readFileContent),
       'This is a markdown file for test'
     );
   });
