@@ -208,12 +208,18 @@ export function activate(context: vscode.ExtensionContext) {
   decorateTags();
 }
 
-function decorateTags() {
-  const config = vscode.workspace.getConfiguration('kainotes');
-  const highlight = config.get('highlight') as HighlightConfig;
+const config = vscode.workspace.getConfiguration('kainotes');
+const highlight = config.get('highlight') as HighlightConfig;
 
-  const { enable, color = '#1f1f1f', backgroundColor = '#d9ad00' } = highlight;
-  if (!enable) {
+const decorationType = vscode.window.createTextEditorDecorationType({
+  borderRadius: '4px',
+  backgroundColor: highlight.backgroundColor,
+  color: highlight.color,
+  fontWeight: 'medium',
+});
+
+function decorateTags() {
+  if (!highlight.enable) {
     return;
   }
 
@@ -235,12 +241,6 @@ function decorateTags() {
     return new vscode.Range(startPos, endPos);
   });
 
-  const decorationType = vscode.window.createTextEditorDecorationType({
-    borderRadius: '4px',
-    backgroundColor,
-    color,
-    fontWeight: 'medium',
-  });
 
   editor.setDecorations(decorationType, ranges);
 }
