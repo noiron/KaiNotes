@@ -1,5 +1,8 @@
 # Change Log
 
+0.0.12(2023-05-17)
+  - Bugfix: The text following a highlighted tag would be erroneously highlighted when entering a space or line break.
+
 0.0.11(2022-12-14)
   - Bugfix: When renaming a tag, if no new tag is entered, it will be replaced with "undefined"
 
