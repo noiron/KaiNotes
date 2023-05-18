@@ -1,4 +1,9 @@
-export function getWebviewContent(tags: any[] = []) {
+import * as vscode from 'vscode';
+
+export function getWebviewContent(
+  tags: any[] = [],
+  icons: { [index: string]: vscode.Uri }
+) {
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -21,15 +26,27 @@ export function getWebviewContent(tags: any[] = []) {
         cursor: pointer;
         color: #000;
       }
+      .button img {
+        width: 24px;
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.min.js"></script>
+    <script>
+
+    </script>
 </head>
 <body>
     <canvas id="wordcloud"></canvas>
     <div id="buttons">
-      <div class="button" onclick="redraw(1)">+</div>
-      <div class="button" onclick="redraw(-1)">-</div>
-      <div class="button" onclick="draw()">🔁</div>
+      <div class="button" onclick="redraw(1)">
+        <img src="${icons.zoomIn}" />
+      </div>
+      <div class="button" onclick="redraw(-1)">
+        <img src="${icons.zoomOut}" />
+      </div>
+      <div class="button" onclick="draw()">
+        <img src="${icons.refresh}" />
+      </div>
     </div>
 
     <script>

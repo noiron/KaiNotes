@@ -21,7 +21,16 @@ export async function tagCloud(context: vscode.ExtensionContext) {
     }
   );
 
-  panel.webview.html = getWebviewContent(dataSource.tagList);
+  function getIcon(name: string) {
+    const onDiskPath = vscode.Uri.joinPath(context.extensionUri, 'media', name);
+    return panel.webview.asWebviewUri(onDiskPath);
+  }
+
+  panel.webview.html = getWebviewContent(dataSource.tagList, {
+    refresh: getIcon('refresh.svg'),
+    zoomIn: getIcon('zoom-in.svg'),
+    zoomOut: getIcon('zoom-out.svg'),
+  });
 
   panel.webview.onDidReceiveMessage(
     (message) => {
