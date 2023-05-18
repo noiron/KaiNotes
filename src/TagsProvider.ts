@@ -79,7 +79,7 @@ export class TagProvider implements vscode.TreeDataProvider<TagItem> {
   }
 }
 
-class TagItem extends vscode.TreeItem {
+export class TagItem extends vscode.TreeItem {
   constructor(
     public readonly file: string,
     private num: number,
