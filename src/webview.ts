@@ -12,13 +12,22 @@ export function getWebviewContent(
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cat Coding</title>
     <style>
+      body {
+        background: #fff;
+      }
+
+      body.vscode-dark {
+        background: #000;
+      }
+
       #buttons {
         position: fixed;
         right: 20px;
-        bottom: 20px;
         width: 40px;
         text-align: center;
         top: 45%;
+        background: #ccc;
+        border-radius: 4px;
       }
       .button {
         font-size: 32px;
@@ -52,6 +61,7 @@ export function getWebviewContent(
     <script>
       const vscode = acquireVsCodeApi();
       const tags = ${JSON.stringify(tags)};
+      const isDarkTheme = document.querySelector('body').classList.contains('vscode-dark');
 
       let weightFactor = 5;
 
@@ -61,22 +71,30 @@ export function getWebviewContent(
       }
   
       const canvas = document.getElementById('wordcloud');
-  
+
       function draw() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-  
+
+        const colors = isDarkTheme ? {
+          color: 'random-light',
+          backgroundColor: '#000'
+        }: {
+          color: 'random-dark',
+          backgroundColor: '#fff'
+        };
+
         WordCloud(canvas, {
           list: tags,
           gridSize: 5,
           fontFamily: 'Times, serif',
           weightFactor,
-          color: 'random-dark',
+          ...colors,
           rotateRatio: 0,
           rotationSteps: 2,
-          backgroundColor: '#fff',
           minSize: 4,
           drawOutOfBound: true,
+          // shuffle: false,
           click: (item) => {
             const tag = item[0];
             vscode.postMessage({
