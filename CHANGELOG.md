@@ -1,5 +1,9 @@
 # Change Log
 
+0.0.13(2023-05-19)
+  - Updated icons in the tag cloud page.
+  - Changed tag cloud colors based on the theme.
+
 0.0.12(2023-05-17)
   - Bugfix: The text following a highlighted tag would be erroneously highlighted when entering a space or line break.
 
