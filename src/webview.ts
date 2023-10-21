@@ -63,7 +63,11 @@ export function getWebviewContent(
       const tags = ${JSON.stringify(tags)};
       const isDarkTheme = document.querySelector('body').classList.contains('vscode-dark');
 
-      let weightFactor = 5;
+      const maxCount = tags.reduce((a, b) => Math.max(a, b[1]), 0);
+      // User a dynamic weight factor. Can we based on total count?
+      let weightFactor = window.innerWidth / maxCount / 5;
+      // const totalCount = tags.reduce((a, b) => a + b[1], 0);
+      // let weightFactor = window.innerWidth / totalCount / 2;
 
       function redraw(diff) {
         weightFactor += diff;

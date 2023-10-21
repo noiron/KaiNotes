@@ -12,10 +12,6 @@ export let sortMethod: (typeof SORT_METHOD)[keyof typeof SORT_METHOD] =
 export function activate(context: vscode.ExtensionContext) {
   const workspaceFolders = vscode.workspace.workspaceFolders;
 
-  vscode.commands.registerCommand('kainotes.tagCloud', () =>
-    commands.tagCloud(context)
-  );
-
   const rootPath =
     vscode.workspace.workspaceFolders &&
     vscode.workspace.workspaceFolders.length > 0
@@ -28,6 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   const filesForTagProvider = new FilesProvider(rootPath as string);
+
   vscode.window.createTreeView('filesForTag', {
     treeDataProvider: filesForTagProvider,
   });
@@ -57,6 +54,10 @@ export function activate(context: vscode.ExtensionContext) {
       select: true,
     });
   });
+
+  vscode.commands.registerCommand('kainotes.tagCloud', () =>
+    commands.tagCloud(context)
+  );
 
   vscode.commands.registerCommand('kainotes.toggleSortMethod', () => {
     sortMethod =
