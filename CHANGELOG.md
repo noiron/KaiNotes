@@ -1,5 +1,8 @@
 # Change Log
 
+0.0.14(2023-10-21)
+  - Use dynamic weight factor for tag cloud.
+
 0.0.13(2023-05-19)
   - Updated icons in the tag cloud page.
   - Changed tag cloud colors based on the theme.
