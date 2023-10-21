@@ -22,7 +22,7 @@ KaiNotes offer a command to display all your tags as tag cloud. Use ⇧⌘P to o
 
 If you have any suggestions or encounter any issues with this extension, please feel free to get in touch with me using the following methods:
 
-Email: wukai2048@gmail.com
-GitHub Issues: https://github.com/noiron/KaiNotes/issues
+- Email: wukai2048@gmail.com
+- GitHub Issues: https://github.com/noiron/KaiNotes/issues
 
 I look forward to hearing from you and appreciate your feedback!
