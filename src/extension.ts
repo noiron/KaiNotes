@@ -5,6 +5,7 @@ import { FilesProvider } from './FilesProvider';
 import { ALL_TAGS, MARKDOWN_REGEX, SORT_METHOD } from './constants';
 import { HighlightConfig } from './types';
 import * as commands from './commands';
+import { TagSearchViewProvider } from './TagSearchViewProvider';
 
 export let sortMethod: (typeof SORT_METHOD)[keyof typeof SORT_METHOD] =
   SORT_METHOD.quantity;
@@ -77,6 +78,16 @@ export function activate(context: vscode.ExtensionContext) {
         commands.completeTagInput(workspaceFolders),
     },
     '#' // triggered whenever a '#' is being typed
+  );
+
+  // 添加 sidebar 中的标签 webview
+  const provider = new TagSearchViewProvider(context.extensionUri);
+
+  context.subscriptions.push(
+    vscode.window.registerWebviewViewProvider(
+      TagSearchViewProvider.viewType,
+      provider
+    )
   );
 
   context.subscriptions.push(
