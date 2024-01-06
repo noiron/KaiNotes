@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import dataSource from './DataSource';
 
 export class TagSearchViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = 'tagSearchView';
@@ -7,7 +8,7 @@ export class TagSearchViewProvider implements vscode.WebviewViewProvider {
 
   constructor(private readonly _extensionUri: vscode.Uri) {}
 
-  public resolveWebviewView(
+  public async resolveWebviewView(
     webviewView: vscode.WebviewView,
     context: vscode.WebviewViewResolveContext,
     _token: vscode.CancellationToken
@@ -23,7 +24,8 @@ export class TagSearchViewProvider implements vscode.WebviewViewProvider {
       // ]
     };
 
-    webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
+    await dataSource.update();
+    webviewView.webview.html = this._getHtmlForWebview(webviewView.webview, dataSource.tagList);
 
     webviewView.webview.onDidReceiveMessage((data) => {
       switch (data.type) {
@@ -34,7 +36,7 @@ export class TagSearchViewProvider implements vscode.WebviewViewProvider {
     });
   }
 
-  private _getHtmlForWebview(webview: vscode.Webview) {
+  private _getHtmlForWebview(webview: vscode.Webview, tags: any[] = []) {
     // Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
     const scriptUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, 'media', 'tags-search-webview.js')
@@ -60,6 +62,9 @@ export class TagSearchViewProvider implements vscode.WebviewViewProvider {
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 				<title>Tag Search</title>
+        <script>
+          window.tags = ${JSON.stringify(tags)};
+        </script>
 			</head>
 			<body>
         <div id="root"></div>
