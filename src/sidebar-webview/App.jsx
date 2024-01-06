@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Tag from './Tag';
 
@@ -19,8 +19,14 @@ const StyledBox = styled.div`
 `;
 
 const App = (props) => {
-  const { tags } = props;
+  const [tags, setTags] = useState(props.tags);
   const [input, setInput] = useState('');
+
+  useEffect(() => {
+    // 根据 tag 的数量排序
+    tags.sort((a, b) => b[1] - a[1]);
+    setTags([...tags]);
+  }, [props.tags]);
 
   return (
     <StyledBox>
