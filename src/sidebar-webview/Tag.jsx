@@ -17,10 +17,10 @@ const StyledTag = styled.span`
 `;
 
 const Tag = (props) => {
-  const { tagName, tagCount } = props;
+  const { tagName, tagCount, onClick } = props;
 
   return (
-    <StyledTag>
+    <StyledTag onClick={onClick}>
       <Icon />
       {`${tagName} x ${tagCount}`}
     </StyledTag>

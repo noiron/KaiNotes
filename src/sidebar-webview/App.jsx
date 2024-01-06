@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Tag from './Tag';
 
@@ -28,6 +28,21 @@ const App = (props) => {
     setTags([...tags]);
   }, [props.tags]);
 
+  const postTagMessage = useCallback((tag) => {
+    vscode.postMessage({
+      type: 'tag',
+      tag,
+    });
+  }, []);
+
+  const handleTagClick = useCallback(
+    (tag) => {
+      setInput(tag);
+      postTagMessage(tag);
+    },
+    [postTagMessage]
+  );
+
   return (
     <StyledBox>
       <div className="search-row">
@@ -37,10 +52,7 @@ const App = (props) => {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              vscode.postMessage({
-                type: 'tag',
-                tag: input,
-              });
+              postTagMessage(input);
             }
           }}
         />
@@ -58,7 +70,14 @@ const App = (props) => {
       </div>
       <div>
         {tags.map((tag) => {
-          return <Tag key={tag.tagName} tagName={tag[0]} tagCount={tag[1]} />;
+          return (
+            <Tag
+              key={tag.tagName}
+              tagName={tag[0]}
+              tagCount={tag[1]}
+              onClick={() => handleTagClick(tag[0])}
+            />
+          );
         })}
       </div>
     </StyledBox>
