@@ -69,6 +69,7 @@ const App = (props) => {
         </button>
       </div>
       <div>
+        {/* TODO: 增加一个 ALL tag */}
         {tags.map((tag) => {
           return (
             <Tag

@@ -11,8 +11,12 @@ const StyledTag = styled.span`
   align-items: center;
   border: 1px solid #ccc;
   border-radius: 5px;
+  font-size: 12px;
   svg {
     margin-right: 4px;
+  }
+  .quantity {
+    color: #aaa;
   }
 `;
 
@@ -22,7 +26,8 @@ const Tag = (props) => {
   return (
     <StyledTag onClick={onClick}>
       <Icon />
-      {`${tagName} x ${tagCount}`}
+      <span>{tagName}</span>
+      <span className='quantity'>&nbsp;x&nbsp;{tagCount}</span>
     </StyledTag>
   );
 };
