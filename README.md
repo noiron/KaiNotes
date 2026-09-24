@@ -26,3 +26,7 @@ If you have any suggestions or encounter any issues with this extension, please 
 - GitHub Issues: https://github.com/noiron/KaiNotes/issues
 
 I look forward to hearing from you and appreciate your feedback!
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
